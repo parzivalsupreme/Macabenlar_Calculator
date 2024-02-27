@@ -10,7 +10,7 @@ public class MainActivity extends AppCompatActivity {
   private TextView textView;
   private String currentNumber = "";
   private String operation = "";
-  private double result = 0;
+  private double firstNumber = 0;
   private boolean isNewOperation = true;
 
   @Override
@@ -33,28 +33,44 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void onOperationClick(View view) {
-    if (!isNewOperation) {
-      if (!currentNumber.isEmpty()) {
-        double number = Double.parseDouble(currentNumber);
-        if (operation.equals("+")) {
-          result += number;
-        } else if (operation.equals("-")) {
-          result -= number;
-        } else if (operation.equals("*")) {
-          result *= number;
-        } else if (operation.equals("/")) {
-          if (number != 0) {
-            result /= number;
-          } else {
-            textView.setText("Error");
-            return;
-          }
-        }
-        textView.setText(String.valueOf(result));
-      }
+    if (!currentNumber.isEmpty()) {
+      firstNumber = Double.parseDouble(currentNumber);
     }
 
     operation = ((TextView) view).getText().toString();
     isNewOperation = true;
+    textView.setText(operation);
+  }
+
+  public void onEqualsClick(View view) {
+    if (!isNewOperation && !operation.isEmpty()) {
+      double secondNumber = Double.parseDouble(currentNumber);
+      double result = 0;
+
+      switch (operation) {
+        case "+":
+          result = firstNumber + secondNumber;
+          break;
+        case "-":
+          result = firstNumber - secondNumber;
+          break;
+        case "x":
+          result = firstNumber * secondNumber;
+          break;
+        case "÷":
+          if (secondNumber != 0) {
+            result = firstNumber / secondNumber;
+          } else {
+            textView.setText("Error");
+            return;
+          }
+          break;
+      }
+
+      textView.setText(String.valueOf(result));
+      isNewOperation = true;
+      currentNumber = "";
+      operation = "";
+    }
   }
 }
